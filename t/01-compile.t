@@ -28,7 +28,9 @@ $sub = eval <<'PERL';
     }
 PERL
 
-is ref $sub, 'CODE', "we can compile a simple subroutine";
+SKIP: {
+is ref $sub, 'CODE', "we can compile a simple subroutine"
+    or skip $@ => 2;
 
 {
     my @warnings;
@@ -36,4 +38,5 @@ is ref $sub, 'CODE', "we can compile a simple subroutine";
     is $sub->("Foo", 'bar', 'baz'), "'Foo' is 'bar'", "Passing parameters works";
     is_deeply \@warnings, [], "No warnings get raised during call"
         or diag Dumper \@warnings;
+}
 }
