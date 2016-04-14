@@ -6,7 +6,6 @@ use Data::Dumper;
 use Filter::signatures;
 use feature 'signatures';
 
-
 # Anonymous
 my $sub = sub ($name, $value) {
         return "'$name' is '$value'"

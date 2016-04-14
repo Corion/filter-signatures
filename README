@@ -38,6 +38,21 @@ CAVEATS
     module will disable its functionality when it is run on a Perl
     supporting signatures.
 
+ eval
+
+    It seems that Filter::Simple does not trigger when using code such as
+
+      eval <<'PERL';
+          use Filter::signatures;
+          use feature 'signatures';
+          
+          sub foo (...) {
+          }
+      PERL
+
+    So, creating subroutines with signatures from strings won't work with
+    this module. The workaround is to upgrade to Perl 5.20 or higher.
+
 SEE ALSO
 
     "Signatures" in perlsub

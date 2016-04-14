@@ -10,10 +10,10 @@ README
 README.mkdn
 t/00-load.t
 t/01-compile.t
+t/02-compile-direct.t
 xt/99-changes.t
 xt/99-compile.t
 xt/99-manifest.t
-xt/99-minimumversion.t
 xt/99-pod.t
 xt/99-todo.t
 xt/99-unix-text.t
