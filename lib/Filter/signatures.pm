@@ -51,7 +51,11 @@ FILTER_ONLY
         # THis should also support
         # sub foo($x,$y,@) { ... }, throwing away additional arguments
         #s!\bsub\s*(\w+)\s*(\([^)]*?\))\s*{\s*$!my $r= "sub $1 { my $2=\@_;";print "[[$r]]\n";$r!mge;
-        s!\bsub\s*(\w+)\s*(\([^)]*?\@?\))\s*{\s*$!sub $1 { my $2=\@_;!mg;
+        
+        # Named or anonymous subs
+        no warnings 'undefined';
+        s!\bsub\s*(\w*)\s*(\([^)]*?\@?\))\s*{\s*$!sub $1 { my $2=\@_;!mg;
+
     },
     executable => sub {
             s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;
