@@ -7,7 +7,7 @@ $VERSION = '0.01';
 
 =head1 NAME
 
-Filter::signatures - very simplicistic signatures for Perl < 5.18
+Filter::signatures - very simplicistic signatures for Perl < 5.20
 
 =head1 SYNOPSIS
 
@@ -39,12 +39,13 @@ the misinterpreted regular expression:
 
     my $wait_time = $needed / $supply; # / for Filter::Simple
 
-A better hotfix is to upgrade to Perl 5.18 or higher and use the native
+A better hotfix is to upgrade to Perl 5.20 or higher and use the native
 signatures support there. No other code change is needed, as this module will
 disable its functionality when it is run on a Perl supporting signatures.
 
 =cut
 
+if( $] <= 5.020 ) {
 FILTER_ONLY
     code => sub {
         # THis should also support
@@ -56,6 +57,7 @@ FILTER_ONLY
             s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;
     },
     ;
+}
 
 1;
 
