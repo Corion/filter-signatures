@@ -47,20 +47,14 @@ WriteMakefile1(
     },
 
     PREREQ_PM => {
+        'Filter::Simple' => 0, # what did you expect?
+    },
+    TEST_REQUIRES => {
         'Test::More' => 0,
-        'File::Spec' => 0, # some tests do, at least
-        'Exporter'   => 5, # for 'import'
+    },
 
-        'File::Temp' => 0,
-        'File::Copy' => 0,
-        'IPC::Open3' => 0, # for talking to 7zip
-        'Path::Class' => 0,
-        'Encode'      => 0,
-        'File::Basename' => 0,
-        'Time::Piece' => 0,
-   },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Archive-SevenZip-*' },
+    clean               => { FILES => 'Filter-signatures-*' },
 
     test            => { TESTS => join( ' ', @tests ) },
 );
@@ -77,6 +71,10 @@ sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-
         #EUMM 6.5502 has problems with BUILD_REQUIRES
         $params{PREREQ_PM}={ %{$params{PREREQ_PM} || {}} , %{$params{BUILD_REQUIRES}} };
         delete $params{BUILD_REQUIRES};
+    }
+    if ($params{TEST_REQUIRES} and $eumm_version < 6.64) {
+        $params{PREREQ_PM}={ %{$params{PREREQ_PM} || {}} , %{$params{TEST_REQUIRES}} };
+        delete $params{TEST_REQUIRES};
     }
     delete $params{CONFIGURE_REQUIRES} if $eumm_version < 6.52;
     delete $params{MIN_PERL_VERSION} if $eumm_version < 6.48;
