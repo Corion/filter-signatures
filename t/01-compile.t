@@ -3,6 +3,9 @@ use strict;
 use Test::More tests => 5;
 use Data::Dumper;
 
+use vars '$TODO';
+$TODO = "Eval-compile and Filter::Simple don't play together";
+
 my $sub = eval <<'PERL';
     use Filter::signatures;
     use feature 'signatures';
@@ -13,7 +16,7 @@ PERL
 
 SKIP: {
     is ref $sub, 'CODE', "we can compile a simple subroutine"
-        or skip 1, $@;
+        or skip $@ => 1;
     is $sub->("Foo", 'bar'), "'Foo' is 'bar'", "Passing parameters works";
 }
 

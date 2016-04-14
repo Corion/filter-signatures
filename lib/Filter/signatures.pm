@@ -43,9 +43,25 @@ A better hotfix is to upgrade to Perl 5.20 or higher and use the native
 signatures support there. No other code change is needed, as this module will
 disable its functionality when it is run on a Perl supporting signatures.
 
+=head2 C<< eval >>
+
+It seems that L<Filter::Simple> does not trigger when using
+code such as
+
+  eval <<'PERL';
+      use Filter::signatures;
+      use feature 'signatures';
+      
+      sub foo (...) {
+      }
+  PERL
+
+So, creating subroutines with signatures from strings won't work with
+this module. The workaround is to upgrade to Perl 5.20 or higher.
+
 =cut
 
-if( $] <= 5.020 ) {
+if( $] < 5.020 ) {
 FILTER_ONLY
     code => sub {
         # THis should also support
