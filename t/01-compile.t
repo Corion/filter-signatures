@@ -11,8 +11,11 @@ my $sub = eval <<'PERL';
     }
 PERL
 
-is ref $sub, 'CODE', "we can compile a simple subroutine";
-is $sub->("Foo", 'bar'), "'Foo' is 'bar'", "Passing parameters works";
+SKIP: {
+    is ref $sub, 'CODE', "we can compile a simple subroutine"
+        or skip 1, $@;
+    is $sub->("Foo", 'bar'), "'Foo' is 'bar'", "Passing parameters works";
+}
 
 $sub = eval <<'PERL';
     use Filter::signatures;
