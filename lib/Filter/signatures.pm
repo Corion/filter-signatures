@@ -53,7 +53,7 @@ FILTER_ONLY
         #s!\bsub\s*(\w+)\s*(\([^)]*?\))\s*{\s*$!my $r= "sub $1 { my $2=\@_;";print "[[$r]]\n";$r!mge;
         
         # Named or anonymous subs
-        no warnings 'undefined';
+        no warnings 'uninitialized';
         s!\bsub\s*(\w*)\s*(\([^)]*?\@?\))\s*{\s*$!sub $1 { my $2=\@_;!mg;
 
     },
