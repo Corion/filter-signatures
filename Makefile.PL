@@ -14,7 +14,7 @@ my $module = 'Filter::signatures';
 (my $main_file = "lib/$module.pm" ) =~ s!::!/!g;
 
 # I should maybe use something like Shipwright...
-regen_README();
+regen_README($main_file);
 #regen_EXAMPLES();
 
 my @tests = map { glob $_ } 't/*.t', 't/*/*.t';

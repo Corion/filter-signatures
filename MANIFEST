@@ -1,3 +1,4 @@
+.gitignore
 Changes
 lib/Filter/signatures.pm
 Makefile.PL
@@ -5,6 +6,8 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.json
 META.yml
+README
+README.mkdn
 t/00-load.t
 t/01-compile.t
 xt/99-changes.t
