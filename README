@@ -53,6 +53,13 @@ CAVEATS
     So, creating subroutines with signatures from strings won't work with
     this module. The workaround is to upgrade to Perl 5.20 or higher.
 
+ENVIRONMENT
+
+    If you want to force the use of this module even under versions of Perl
+    that have native support for signatures, set
+    $ENV{FORCE_FILTER_SIGNATURES} to a true value before the module is
+    imported.
+
 SEE ALSO
 
     "Signatures" in perlsub

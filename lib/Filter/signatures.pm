@@ -3,7 +3,7 @@ use strict;
 use Filter::Simple;
 
 use vars '$VERSION';
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 =head1 NAME
 
@@ -59,9 +59,22 @@ code such as
 So, creating subroutines with signatures from strings won't work with
 this module. The workaround is to upgrade to Perl 5.20 or higher.
 
+=head1 ENVIRONMENT
+
+If you want to force the use of this module even under versions of
+Perl that have native support for signatures, set
+C<< $ENV{FORCE_FILTER_SIGNATURES} >> to a true value before the module is
+imported.
+
 =cut
 
-if( $] < 5.020 ) {
+my $have_signatures = eval {
+    require feature;
+    feature->import('signatures');
+    1
+};
+
+if( ! $have_signatures or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
     code => sub {
         # THis should also support
