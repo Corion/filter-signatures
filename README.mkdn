@@ -5,6 +5,7 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
 # SYNOPSIS
 
     use Filter::signatures;
+    no warnings 'experimental::signatures'; # does not raise an error
     use feature 'signatures'; # this now works on <5.16 as well
     
     sub hello( $name ) {
