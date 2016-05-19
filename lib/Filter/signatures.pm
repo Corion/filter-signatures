@@ -12,6 +12,7 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
 =head1 SYNOPSIS
 
     use Filter::signatures;
+    no warnings 'experimental::signatures'; # does not raise an error
     use feature 'signatures'; # this now works on <5.16 as well
     
     sub hello( $name ) {
@@ -88,8 +89,19 @@ FILTER_ONLY
     },
     executable => sub {
             s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;
+            s!^(no\s+warnings\s*(['"])experimental::signatures\2);!#$1!mg;
     },
     ;
+
+    # Set up a fake 'experimental::signatures' warnings category
+    { package # hide from CPAN
+        experimental::signatures;
+    eval {
+        require warnings::register;
+        warnings::register->import();
+    }
+    }
+
 }
 
 1;

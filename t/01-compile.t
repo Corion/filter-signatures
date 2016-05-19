@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 5;
+use Test::More tests => 8;
 use Data::Dumper;
 
 use vars '$TODO';
@@ -36,6 +36,30 @@ is ref $sub, 'CODE', "we can compile a simple subroutine"
     my @warnings;
     local $SIG{__WARN__} = sub { push @warnings, \@_};
     is $sub->("Foo", 'bar', 'baz'), "'Foo' is 'bar'", "Passing parameters works";
+    is_deeply \@warnings, [], "No warnings get raised during call"
+        or diag Dumper \@warnings;
+}
+}
+
+# Test our synopsis
+$sub = eval <<'PERL';
+    use Filter::signatures;
+    no warnings 'experimental::signatures'; # does not raise an error
+    use feature 'signatures'; # this now works on <5.16 as well
+    
+    sub ( $name ) {
+        "Hello $name\n";
+    }
+PERL
+
+SKIP: {
+is ref $sub, 'CODE', "we can compile a simple subroutine"
+    or skip $@ => 2;
+
+{
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, \@_};
+    is $sub->('world'), "Hello world", "Passing parameters works";
     is_deeply \@warnings, [], "No warnings get raised during call"
         or diag Dumper \@warnings;
 }
