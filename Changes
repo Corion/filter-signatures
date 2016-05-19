@@ -1,3 +1,8 @@
+0.03 20160519
+    + Add our own fake 'experimental::signatures' warning category
+      if we install our filter so that "no warnings 'experimental::signatures'"
+      doesn't raise an error on Perl versions where we install our filter
+
 0.02 20160423
     + Check does now not use the version of Perl but checks
       `use feature 'signatures'`
