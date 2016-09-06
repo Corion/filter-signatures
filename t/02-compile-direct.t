@@ -1,10 +1,11 @@
 #!perl -w
 use strict;
-use Test::More tests => 3;
+use Test::More tests => 5;
 use Data::Dumper;
 
 use Filter::signatures;
 use feature 'signatures';
+no warnings 'experimental::signatures';
 
 # Anonymous
 my $sub = sub ($name, $value) {
@@ -18,10 +19,28 @@ SKIP: {
 }
 
 # Named
-sub foo ($name, $value) {
+sub foo1 ($name, $value) {
         return "'$name' is '$value'"
 };
 
 SKIP: {
-    is foo("Foo", 'bar'), "'Foo' is 'bar'", "Passing parameters works (named)";
+    is foo1("Foo", 'bar'), "'Foo' is 'bar'", "Passing parameters works (named)";
+}
+
+# Named, with default
+sub foo2 ($name, $value='default') {
+        return "'$name' is '$value'"
+};
+
+SKIP: {
+    is foo2("Foo"), "'Foo' is 'default'", "default parameters works";
+}
+
+# Named, with default
+sub foo3 ($name, $value='default, with comma') {
+        return "'$name' is '$value'"
+};
+
+SKIP: {
+    is foo3("Foo"), "'Foo' is 'default, with comma'", "default parameters works even with embedded comma";
 }

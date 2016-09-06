@@ -1,3 +1,19 @@
+0.04 20160906
+    + Add support for defaults, and our own, very, _very_
+      simplicistic "expression parser" (which blindly splits on comma.
+      This means that the following is now supported:
+        sub foo( $bar, $baz='default' ) {
+          return $baz
+        };
+        print foo("two","parameters"); # parameters
+        print foo("one");              # default
+
+      The following will still fail horribly, because we don't parse expressions:
+        sub foo( $bar, $baz=bar(1,2) ) {
+          print $baz # "default"
+        };
+
+
 0.03 20160519
     + Add our own fake 'experimental::signatures' warning category
       if we install our filter so that "no warnings 'experimental::signatures'"

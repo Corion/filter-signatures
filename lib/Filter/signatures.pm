@@ -21,11 +21,24 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
     
     hello("World");
 
+    sub hello2( $name="world" ) {
+        print "Hello $name\n";
+    }
+    hello2(); # Hello world
+
+
 =head1 CAVEATS
 
 This implements a very simplicistic transform to allow for using very
 simplicistic named formal arguments in subroutine declarations. This module
 does not implement warning if more parameters than expected are passed in.
+
+The module also implements default values for unnamed parameters by
+splitting the formal parameters on C<< /,/ >> and assigning the values
+if C<< @_ >> contains fewer exlements than expected. Function calls
+as default values may work by accident. Commas within default values happen
+to work due to the design of L<Filter::Simple>, which removes them for
+the application of this filter.
 
 Note that this module inherits all the bugs of L<Filter::Simple> and potentially
 adds some of its own. Most notable is that Filter::Simple sometimes will
@@ -75,6 +88,21 @@ my $have_signatures = eval {
     1
 };
 
+sub parse_argument_list {
+    my( $name, $arglist ) = @_;
+    (my $args=$arglist) =~ s!^\((.*)\)!$1!;
+    my @args = split /\s*,\s*/, $args; # a most simple argument parser
+    my @defaults;
+    for( 0..$#args ) {
+        if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
+            my $named = "$1";
+            push @defaults, "$args[$_] if \@_ <= $_;";
+            $args[$_] = $named;
+        };
+    };
+    return sprintf 'sub %s { my (%s)=@_;%s', $name, join(",", @args), join( "" , @defaults);
+}
+
 if( ! $have_signatures or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
     code => sub {
@@ -84,8 +112,10 @@ FILTER_ONLY
         
         # Named or anonymous subs
         no warnings 'uninitialized';
-        s!\bsub\s*(\w*)\s*(\([^)]*?\@?\))\s*{\s*$!sub $1 { my $2=\@_;!mg;
-
+        s{\bsub\s*(\w*)\s*(\([^)]*?\@?\))\s*\{\s*$}{
+            parse_argument_list("$1","$2")
+         }mge;
+         $_
     },
     executable => sub {
             s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;

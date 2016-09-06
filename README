@@ -13,6 +13,11 @@ SYNOPSIS
         }
         
         hello("World");
+    
+        sub hello2( $name="world" ) {
+            print "Hello $name\n";
+        }
+        hello2(); # Hello world
 
 CAVEATS
 
@@ -20,6 +25,13 @@ CAVEATS
     simplicistic named formal arguments in subroutine declarations. This
     module does not implement warning if more parameters than expected are
     passed in.
+
+    The module also implements default values for unnamed parameters by
+    splitting the formal parameters on /,/ and assigning the values if @_
+    contains fewer exlements than expected. Function calls as default
+    values may work by accident. Commas within default values happen to
+    work due to the design of Filter::Simple, which removes them for the
+    application of this filter.
 
     Note that this module inherits all the bugs of Filter::Simple and
     potentially adds some of its own. Most notable is that Filter::Simple
