@@ -1,3 +1,8 @@
+0.05 20160929
+    . Bump Filter::Simple prerequisite to 0.91
+      Earlier versions gave problems with some of my modules
+      If it works for you, no need to upgrade
+
 0.04 20160906
     + Add support for defaults, and our own, very, _very_
       simplicistic "expression parser" (which blindly splits on comma.
@@ -12,7 +17,6 @@
         sub foo( $bar, $baz=bar(1,2) ) {
           print $baz # "default"
         };
-
 
 0.03 20160519
     + Add our own fake 'experimental::signatures' warning category

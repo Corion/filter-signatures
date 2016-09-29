@@ -47,7 +47,7 @@ WriteMakefile1(
     },
 
     PREREQ_PM => {
-        'Filter::Simple' => 0, # what did you expect?
+        'Filter::Simple' => '0.91', # I got spurious errors in MIME::Detect with older versions
     },
     TEST_REQUIRES => {
         'Test::More' => 0,
