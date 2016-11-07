@@ -1,3 +1,9 @@
+0.06 20161107
+    + Don't crash on empty function parameter lists.
+	+ Make module internals more testable
+	. Add a test that verifies function default parameters actually parse
+	  as we expect. Thanks to Rolf Langsdorf for the discussion.
+
 0.05 20160929
     . Bump Filter::Simple prerequisite to 0.91
       Earlier versions gave problems with some of my modules
