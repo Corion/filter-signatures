@@ -35,7 +35,7 @@ does not implement warning if more parameters than expected are passed in.
 
 The module also implements default values for unnamed parameters by
 splitting the formal parameters on C<< /,/ >> and assigning the values
-if C<< @_ >> contains fewer exlements than expected. Function calls
+if C<< @_ >> contains fewer elements than expected. Function calls
 as default values may work by accident. Commas within default values happen
 to work due to the design of L<Filter::Simple>, which removes them for
 the application of this filter.
@@ -103,20 +103,21 @@ sub parse_argument_list {
     return sprintf 'sub %s { my (%s)=@_;%s', $name, join(",", @args), join( "" , @defaults);
 }
 
+sub transform_arguments {
+	# This should also support
+	# sub foo($x,$y,@) { ... }, throwing away additional arguments
+	
+	# Named or anonymous subs
+	no warnings 'uninitialized';
+	s{\bsub\s*(\w*)\s*(\([^)]+?\@?\))\s*\{\s*$}{
+		parse_argument_list("$1","$2")
+	 }mge;
+	 $_
+}
+
 if( ! $have_signatures or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
-    code => sub {
-        # THis should also support
-        # sub foo($x,$y,@) { ... }, throwing away additional arguments
-        #s!\bsub\s*(\w+)\s*(\([^)]*?\))\s*{\s*$!my $r= "sub $1 { my $2=\@_;";print "[[$r]]\n";$r!mge;
-        
-        # Named or anonymous subs
-        no warnings 'uninitialized';
-        s{\bsub\s*(\w*)\s*(\([^)]*?\@?\))\s*\{\s*$}{
-            parse_argument_list("$1","$2")
-         }mge;
-         $_
-    },
+    code => \&transform_arguments,
     executable => sub {
             s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;
             s!^(no\s+warnings\s*(['"])experimental::signatures\2);!#$1!mg;
