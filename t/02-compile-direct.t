@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Data::Dumper;
 
 use Filter::signatures;
@@ -44,3 +44,11 @@ sub foo3 ($name, $value='default, with comma') {
 SKIP: {
     is foo3("Foo"), "'Foo' is 'default, with comma'", "default parameters works even with embedded comma";
 }
+
+# No parameters
+sub foo5 () {
+        return "We can call a sub without parameters"
+};
+
+is foo5(), "We can call a sub without parameters", "A subroutine with an empty parameter list still compiles";
+
