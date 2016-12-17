@@ -1,3 +1,7 @@
+0.07 201612xx
+    + Actually allow for empty parameter lists
+    + Allow for unnamed/ignored parameters sub ($foo,$,$bar) { ... }
+
 0.06 20161107
     + Don't crash on empty function parameter lists.
 	+ Make module internals more testable
