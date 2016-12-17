@@ -2,7 +2,7 @@
 use strict;
 use Test::More tests => 8;
 use Data::Dumper;
-
+BEGIN{ $ENV{FORCE_FILTER_SIGNATURES} = 1; };
 use Filter::signatures;
 use feature 'signatures';
 no warnings 'experimental::signatures';

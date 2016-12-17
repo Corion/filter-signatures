@@ -3,6 +3,7 @@ use strict;
 use Test::More tests => 8;
 use Data::Dumper;
 
+BEGIN{ $ENV{FORCE_FILTER_SIGNATURES} = 1; };
 use vars '$TODO';
 $TODO = "Eval-compile and Filter::Simple don't play together";
 
@@ -48,7 +49,7 @@ $sub = eval <<'PERL';
     use feature 'signatures'; # this now works on <5.16 as well
     
     sub ( $name ) {
-        "Hello $name\n";
+        "Hello $name";
     }
 PERL
 
