@@ -7,11 +7,11 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
     use Filter::signatures;
     no warnings 'experimental::signatures'; # does not raise an error
     use feature 'signatures'; # this now works on <5.16 as well
-    
+
     sub hello( $name ) {
         print "Hello $name\n";
     }
-    
+
     hello("World");
 
     sub hello2( $name="world" ) {
@@ -57,7 +57,7 @@ code such as
     eval <<'PERL';
         use Filter::signatures;
         use feature 'signatures';
-        
+
         sub foo (...) {
         }
     PERL
@@ -83,7 +83,7 @@ modification instead
 
 # REPOSITORY
 
-The public repository of this module is 
+The public repository of this module is
 [http://github.com/Corion/filter-signatures](http://github.com/Corion/filter-signatures).
 
 # SUPPORT
