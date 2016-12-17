@@ -14,11 +14,11 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
     use Filter::signatures;
     no warnings 'experimental::signatures'; # does not raise an error
     use feature 'signatures'; # this now works on <5.16 as well
-    
+
     sub hello( $name ) {
         print "Hello $name\n";
     }
-    
+
     hello("World");
 
     sub hello2( $name="world" ) {
@@ -65,7 +65,7 @@ code such as
   eval <<'PERL';
       use Filter::signatures;
       use feature 'signatures';
-      
+
       sub foo (...) {
       }
   PERL
@@ -92,35 +92,50 @@ sub parse_argument_list {
     my( $name, $arglist ) = @_;
     (my $args=$arglist) =~ s!^\((.*)\)!$1!;
     my @args = split /\s*,\s*/, $args; # a most simple argument parser
-    my @defaults;
-    for( 0..$#args ) {
-        if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
-            my $named = "$1";
-            push @defaults, "$args[$_] if \@_ <= $_;";
-            $args[$_] = $named;
+    my $res;
+    if( @args ) {
+        my @defaults;
+        for( 0..$#args ) {
+            # Named argument
+            if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
+                my $named = "$1";
+                push @defaults, "$args[$_] if \@_ <= $_;";
+                $args[$_] = $named;
+
+            # Slurpy discard
+            } elsif( $args[$_] =~ /^\s*\$\s*$/ ) {
+                $args[$_] = 'undef';
+
+            # Slurpy discard (at the end)
+            } elsif( $args[$_] =~ /^\s*[\%\@]\s*$/ ) {
+                $args[$_] = 'undef';
+            }
         };
+        $res = sprintf 'sub %s { my (%s)=@_;%s', $name, join(",", @args), join( "" , @defaults);
+    } else {
+        $res = sprintf 'sub %s { @_==0 or warn "Subroutine %s called with parameters.";', $name, $name;
     };
-    return sprintf 'sub %s { my (%s)=@_;%s', $name, join(",", @args), join( "" , @defaults);
+
+    return $res
 }
 
 sub transform_arguments {
 	# This should also support
 	# sub foo($x,$y,@) { ... }, throwing away additional arguments
-	
 	# Named or anonymous subs
 	no warnings 'uninitialized';
-	s{\bsub\s*(\w*)\s*(\([^)]+?\@?\))\s*\{\s*$}{
+	s{\bsub\s*(\w*)\s*((?:\([^)]*?\@?\))?)\s*\{\s*$}{
 		parse_argument_list("$1","$2")
 	 }mge;
 	 $_
 }
 
-if( ! $have_signatures or $ENV{FORCE_FILTER_SIGNATURES} ) {
+if( (! $have_signatures) or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
     code => \&transform_arguments,
     executable => sub {
-            s!^(use\s+feature\s*(['"])signatures\2);!#$1!mg;
-            s!^(no\s+warnings\s*(['"])experimental::signatures\2);!#$1!mg;
+            s!^(use\s+feature\s*(['"])signatures\2;)!#$1!mg;
+            s!^(no\s+warnings\s*(['"])experimental::signatures\2;)!#$1!mg;
     },
     ;
 
@@ -148,7 +163,7 @@ L<Sub::Signatures>
 
 =head1 REPOSITORY
 
-The public repository of this module is 
+The public repository of this module is
 L<http://github.com/Corion/filter-signatures>.
 
 =head1 SUPPORT

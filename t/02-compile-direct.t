@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Data::Dumper;
 
 use Filter::signatures;
@@ -51,4 +51,18 @@ sub foo5 () {
 };
 
 is foo5(), "We can call a sub without parameters", "A subroutine with an empty parameter list still compiles";
+
+# Only slurpy discarding parameters
+sub foo6 (@) {
+        return "We can call a sub with all-slurpy ignored parameters"
+};
+
+is foo6('foo','bar','baz'), "We can call a sub with all-slurpy ignored parameters", "A subroutine with an all-slurpy ignored parameter list still compiles";
+
+# Unnamed parameter in the middle
+sub foo7 ($foo, $, $bar) {
+        return "$foo => $bar"
+};
+
+is foo7('Hello','you','World'), "Hello => World", "A subroutine with unnamed parameter still compiles";
 
