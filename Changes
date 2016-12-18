@@ -1,6 +1,7 @@
 0.07 20161218
     + Actually allow for empty parameter lists
     + Allow for unnamed/ignored parameters sub ($foo,$,$bar) { ... }
+    . Adresses Github issue #1
 
 0.06 20161107
     + Don't crash on empty function parameter lists.
