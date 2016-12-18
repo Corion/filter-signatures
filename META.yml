@@ -1,13 +1,14 @@
 ---
-abstract: 'very simplicistic signatures for Perl < 5.18'
+abstract: 'very simplicistic signatures for Perl < 5.20'
 author:
   - 'Max Maischein <corion@cpan.org>'
 build_requires:
   ExtUtils::MakeMaker: '0'
+  Test::More: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.142060'
+generated_by: 'ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.143240'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,17 +19,8 @@ no_index:
     - t
     - inc
 requires:
-  Encode: '0'
-  Exporter: '5'
-  File::Basename: '0'
-  File::Copy: '0'
-  File::Spec: '0'
-  File::Temp: '0'
-  IPC::Open3: '0'
-  Path::Class: '0'
-  Test::More: '0'
-  Time::Piece: '0'
+  Filter::Simple: '0.91'
   perl: '5.006'
 resources:
   repository: git://github.com/Corion/filter-signatures.git
-version: '0.02'
+version: '0.07'
