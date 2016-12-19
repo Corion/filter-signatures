@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Data::Dumper;
 
 require Filter::signatures;
@@ -79,6 +79,31 @@ Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Functions without parameters get converted properly";
 sub mysub { my ($foo,undef,$bar)=@_;
     print "Yey, $foo => $bar\n";
+};
+RESULT
+
+# Signature-less functions remain unchanged
+$_ = <<'SUB';
+sub mysub {
+    print "Yey\n";
+};
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Named functions without signature remain unchanged";
+sub mysub {
+    print "Yey\n";
+};
+RESULT
+
+$_ = <<'SUB';
+sub {
+    print "Yey\n";
+};
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Named functions without signature remain unchanged";
+sub {
+    print "Yey\n";
 };
 RESULT
 

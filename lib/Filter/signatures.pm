@@ -124,7 +124,7 @@ sub transform_arguments {
 	# sub foo($x,$y,@) { ... }, throwing away additional arguments
 	# Named or anonymous subs
 	no warnings 'uninitialized';
-	s{\bsub\s*(\w*)\s*((?:\([^)]*?\@?\))?)\s*\{\s*$}{
+	s{\bsub\s*(\w*)\s*\(((?:[^)]*?\@?))\)\s*\{\s*$}{
 		parse_argument_list("$1","$2")
 	 }mge;
 	 $_
@@ -138,7 +138,6 @@ FILTER_ONLY
             s!^(no\s+warnings\s*(['"])experimental::signatures\2;)!#$1!mg;
     },
     ;
-
     # Set up a fake 'experimental::signatures' warnings category
     { package # hide from CPAN
         experimental::signatures;
