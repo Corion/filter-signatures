@@ -124,7 +124,7 @@ sub transform_arguments {
 	# sub foo($x,$y,@) { ... }, throwing away additional arguments
 	# Named or anonymous subs
 	no warnings 'uninitialized';
-	s{\bsub\s*(\w*)\s*\(((?:[^)]*?\@?))\)\s*\{\s*$}{
+	s{\bsub\s*(\w*)\s*\(((?:[^)]*?\@?))\)\s*\{}{
 		parse_argument_list("$1","$2")
 	 }mge;
 	 $_

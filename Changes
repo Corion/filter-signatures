@@ -1,3 +1,9 @@
+0.09 201701xx
+    + Support single-line functions
+      In fact, we simply don't require the subroutine declaration to be on a
+      separate line from other code.
+      This adresses RT #119843
+
 0.08 20161219
     ! Make signature-less subroutines work again instead of warning
 

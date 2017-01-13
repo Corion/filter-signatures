@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Data::Dumper;
 
 require Filter::signatures;
@@ -105,6 +105,14 @@ is $_, <<'RESULT', "Named functions without signature remain unchanged";
 sub {
     print "Yey\n";
 };
+RESULT
+
+$_ = <<'SUB';
+sub foo($bar,$baz) { print "Yey\n"; }
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "RT #xxxxxx Single-line functions work";
+sub foo { my ($bar,$baz)=@_; print "Yey\n"; }
 RESULT
 
 done_testing;
