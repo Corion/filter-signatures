@@ -127,7 +127,7 @@ sub transform_arguments {
 	s{\bsub\s*(\w*)\s*\(((?:[^)]*?\@?))\)\s*\{}{
 		parse_argument_list("$1","$2")
 	 }mge;
-	 $_
+	$_
 }
 
 if( (! $have_signatures) or $ENV{FORCE_FILTER_SIGNATURES} ) {
