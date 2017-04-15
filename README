@@ -2,6 +2,10 @@ NAME
 
 Filter::signatures - very simplicistic signatures for Perl < 5.20
 
+DESCRIPTION
+
+This module implements a backwards compatibility shim for formal Perl subroutine
+signatures that were introduced to the Perl core with Perl 5.20.
 
 
 INSTALLATION

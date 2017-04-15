@@ -22,9 +22,14 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
     }
     hello2(); # Hello world
 
+# DESCRIPTION
+
+This module implements a backwards compatibility shim for formal Perl subroutine
+signatures that were introduced to the Perl core with Perl 5.20.
+
 # CAVEATS
 
-This implements a very simplicistic transform to allow for using very
+The technique used is a very simplicistic transform to allow for using very
 simplicistic named formal arguments in subroutine declarations. This module
 does not implement warning if more parameters than expected are passed in.
 
