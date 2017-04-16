@@ -63,6 +63,9 @@ WriteMakefile1(
 
 1;
 
+# Below here is boilerplate for making this work across various old versions
+# of ExtUtils::MakeMaker and for (re)generating README and README.mkdn
+
 sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-upgrade.
     my %params=@_;
     my $eumm_version=$ExtUtils::MakeMaker::VERSION;
