@@ -127,7 +127,6 @@ INSTALL
     ;        
         update_file( 'README', $readme );
     };
-    warn $@ if $@;
     # README.mkdn is the documentation that will be shown as the main
     # page of the repository on Github. Hence we recreate the POD here
     # as Markdown
@@ -145,7 +144,6 @@ INSTALL
 STATUS
         update_file( 'README.mkdn', $readme_mkdn );
     };
-    warn $@ if $@;
 }
 
 sub pod_section {
