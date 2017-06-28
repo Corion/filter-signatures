@@ -100,10 +100,12 @@ sub parse_argument_list {
     if( @args ) {
         my @defaults;
         for( 0..$#args ) {
+            # Keep everything on one line
+            $args[$_] =~ s/\n/ /g;
+
             # Named argument
             if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
                 my $named = "$1";
-                $args[$_] =~ s/\n/ /g;
                 push @defaults, "$args[$_] if \@_ <= $_;";
                 $args[$_] = $named;
 

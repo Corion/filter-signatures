@@ -8,12 +8,15 @@ require Filter::signatures;
 sub identical_to_native {
     my( $name, $expected,$decl ) = @_;
     local $_ = $decl;
-    my $org = eval $_
-        or die $@;
+    my $org;
+    if( $^V >= 5.020 ) {
+        $org = eval $_
+            or die $@;
+    };
     Filter::signatures::transform_arguments();
     my $l = eval $_;
     my $got = $l->('foo','bar');
-    my $native = $org->('foo','bar');
+    my $native = $org ? $org->('foo','bar') : $expected;
     is $got, $expected, $name
         or do { diag $decl; diag $_ };
     is $expected, $native, "Sanity check vs native code";
