@@ -89,16 +89,21 @@ my $have_signatures = eval {
 };
 
 sub parse_argument_list {
-    my( $name, $arglist ) = @_;
+    my( $name, $arglist, $whitespace ) = @_;
     (my $args=$arglist) =~ s!^\((.*)\)!$1!;
     my @args = split /\s*,\s*/, $args; # a most simple argument parser
     my $res;
+    # Adjust how man newlines we gobble
+    $whitespace ||= '';
+    #warn "[[$whitespace$args]]";
+    my $padding = () = (($whitespace . $args) =~ /\n/smg);
     if( @args ) {
         my @defaults;
         for( 0..$#args ) {
             # Named argument
             if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
                 my $named = "$1";
+                $args[$_] =~ s/\n/ /g;
                 push @defaults, "$args[$_] if \@_ <= $_;";
                 $args[$_] = $named;
 
@@ -111,7 +116,9 @@ sub parse_argument_list {
                 $args[$_] = 'undef';
             }
         };
-        $res = sprintf 'sub %s { my (%s)=@_;%s', $name, join(",", @args), join( "" , @defaults);
+        $res = sprintf 'sub %s { my (%s)=@_;%s%s', $name, join(",", @args), join( "" , @defaults), "\n" x $padding;
+        # die sprintf("Too many arguments for subroutine at %s line %d.\n", (caller)[1, 2]) unless @_ <= 2
+        # die sprintf("Too few arguments for subroutine at %s line %d.\n", (caller)[1, 2]) unless @_ >= 2
     } else {
         $res = sprintf 'sub %s { @_==0 or warn "Subroutine %s called with parameters.";', $name, $name;
     };
@@ -124,8 +131,8 @@ sub transform_arguments {
 	# sub foo($x,$y,@) { ... }, throwing away additional arguments
 	# Named or anonymous subs
 	no warnings 'uninitialized';
-	s{\bsub\s*(\w*)\s*\(((?:[^)]*?\@?))\)\s*\{}{
-		parse_argument_list("$1","$2")
+	s{\bsub(\s*)(\w*)(\s*)\((\s*)((?:[^)]*?\@?))(\s*)\)(\s*)\{}{
+		parse_argument_list("$2","$5","$1$3$4$6$7")
 	 }mge;
 	$_
 }
