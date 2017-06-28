@@ -13,7 +13,7 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
 
     use Filter::signatures;
     no warnings 'experimental::signatures'; # does not raise an error
-    use feature 'signatures'; # this now works on <5.16 as well
+    use feature 'signatures'; # this now works on <5.20 as well
 
     sub hello( $name ) {
         print "Hello $name\n";
@@ -31,7 +31,8 @@ Filter::signatures - very simplicistic signatures for Perl < 5.20
 
 This implements a very simplicistic transform to allow for using very
 simplicistic named formal arguments in subroutine declarations. This module
-does not implement warning if more parameters than expected are passed in.
+does not implement warning if more or fewer parameters than expected are
+passed in.
 
 The module also implements default values for unnamed parameters by
 splitting the formal parameters on C<< /,/ >> and assigning the values
@@ -57,9 +58,31 @@ A better hotfix is to upgrade to Perl 5.20 or higher and use the native
 signatures support there. No other code change is needed, as this module will
 disable its functionality when it is run on a Perl supporting signatures.
 
+=head2 Line Numbers
+
+Due to a peculiarity of how Filter::Simple treats here documents in some
+versions, line numbers may get out of sync if you use here documents.
+
+If you spread your formal signatures across multiple lines, the line numbers
+may also go out of sync with the original document.
+
+=head2 Comments within signatures
+
+The module does not support comments within signatures
+
+  sub invalid (
+      $name,     # use this as the name
+      $location, # use this as the location
+  ) {
+      "This is an example"
+  }
+
+The workaround is to not do that or to upgrade to Perl 5.20 or higher
+and use the native signatures support there.
+
 =head2 C<< eval >>
 
-It seems that L<Filter::Simple> does not trigger when using
+L<Filter::Simple> does not trigger when using
 code such as
 
   eval <<'PERL';
@@ -72,6 +95,11 @@ code such as
 
 So, creating subroutines with signatures from strings won't work with
 this module. The workaround is to upgrade to Perl 5.20 or higher.
+
+=head2 Deparsing
+
+The generated code does not deparse identically to the code generated on a
+Perl with native support for signatures.
 
 =head1 ENVIRONMENT
 

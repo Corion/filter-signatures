@@ -1,4 +1,5 @@
 .gitignore
+04-deparse.t.disabled
 Changes
 lib/Filter/signatures.pm
 Makefile.PL
