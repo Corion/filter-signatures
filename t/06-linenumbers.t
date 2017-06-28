@@ -14,6 +14,7 @@ sub identical_to_native {
             or die $@;
     };
     Filter::signatures::transform_arguments();
+    no warnings 'redefine';
     my $l = eval $_;
     my $got = $l->('foo','bar');
     my $native = $org ? $org->('foo','bar') : $expected;
@@ -23,6 +24,7 @@ sub identical_to_native {
 }
 
 identical_to_native( "Anonymous subroutine", 5, <<'SUB' );
+no warnings 'experimental::signatures';
 use feature 'signatures';
 #line 1
 sub (
@@ -34,6 +36,7 @@ $name
 SUB
 
 identical_to_native( "Anonymous subroutine (traditional)", 2, <<'SUB' );
+no warnings 'experimental::signatures';
 use feature 'signatures';
 #line 1
 sub ($name, $value) {
@@ -42,19 +45,21 @@ sub ($name, $value) {
 SUB
 
 identical_to_native( "Named subroutine", 6, <<'SUB' );
+no warnings 'experimental::signatures';
 use feature 'signatures';
 #line 1
-sub foo
+sub foo2
 (
   $name
 , $value
 ) {
         return __LINE__
 };
-\&foo
+\&foo2
 SUB
 
 identical_to_native( "Multiline default assignments", 6, <<'SUB' );
+no warnings 'experimental::signatures';
 use feature 'signatures';
 #line 1
 sub (
