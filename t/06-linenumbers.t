@@ -5,7 +5,7 @@ use Data::Dumper;
 
 require Filter::signatures;
 
-if( $^V >= 5.020 ) {
+if( $^V >= 5.20 ) {
   require warnings; warnings->unimport('experimental::signatures');
   require feature; feature->import( 'signatures');
 };
@@ -14,7 +14,7 @@ sub identical_to_native {
     my( $name, $expected,$decl ) = @_;
     local $_ = $decl;
     my $org;
-    if( $^V >= 5.020 ) {
+    if( $^V >= 5.20 ) {
         $org = eval $_
             or die $@;
     };
