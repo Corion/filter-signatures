@@ -7,7 +7,7 @@ build_requires:
   Test::More: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'
-dynamic_config: 1
+dynamic_config: 0
 generated_by: 'ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.143240'
 license: perl
 meta-spec:
@@ -23,4 +23,5 @@ requires:
   perl: '5.006'
 resources:
   repository: git://github.com/Corion/filter-signatures.git
-version: '0.09'
+version: '0.10'
+x_static_install: 1
