@@ -134,8 +134,8 @@ my $have_signatures = eval {
 
 sub parse_argument_list {
     my( $name, $arglist, $whitespace ) = @_;
-    (my $args=$arglist) =~ s!^\((.*)\)!$1!;
-    my @args = split /\s*,\s*/, $args; # a most simple argument parser
+    (my $args=$arglist) =~ s!^\(\s*(.*)\s*\)!$1!s;
+    my @args = map { s!^\s*!!; s!\s*$!!; $_} split /\s*,\s*/, $args; # a most simple argument parser
     my $res;
     # Adjust how man newlines we gobble
     $whitespace ||= '';
@@ -209,7 +209,7 @@ sub transform_arguments {
                      |
                      \(\s*
                          (?6)? # recurse for parentheses
-                     \)\s*
+                     \s*\)
                      )
                 )*
              \@?

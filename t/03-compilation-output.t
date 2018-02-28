@@ -124,7 +124,7 @@ sub staleUploads( $self, $timeout = 3600, $now = time() ) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments with parentheses work";
-sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time()  if @_ <= 2;
+sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time() if @_ <= 2;
 }
 RESULT
 
