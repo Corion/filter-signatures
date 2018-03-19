@@ -7,7 +7,7 @@ $VERSION = '0.11';
 
 =head1 NAME
 
-Filter::signatures - very simplicistic signatures for Perl < 5.20
+Filter::signatures - very simplistic signatures for Perl < 5.20
 
 =head1 SYNOPSIS
 
@@ -33,8 +33,8 @@ signatures that were introduced to the Perl core with Perl 5.20.
 
 =head1 CAVEATS
 
-The technique used is a very simplicistic transform to allow for using very
-simplicistic named formal arguments in subroutine declarations. This module
+The technique used is a very simplistic transform to allow for using very
+simplistic named formal arguments in subroutine declarations. This module
 does not implement warning if more or fewer parameters than expected are
 passed in.
 
