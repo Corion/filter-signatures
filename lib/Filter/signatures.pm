@@ -162,11 +162,16 @@ sub parse_argument_list {
                 $args[$_] = 'undef';
             }
         };
+
+        # Make sure we return undef as the last statement of our initialization
+        # See t/07*
+        push @defaults, "();" if @defaults;
+
         $res = sprintf 'sub %s { my (%s)=@_;%s%s', $name, join(",", @args), join( "" , @defaults), "\n" x $padding;
         # die sprintf("Too many arguments for subroutine at %s line %d.\n", (caller)[1, 2]) unless @_ <= 2
         # die sprintf("Too few arguments for subroutine at %s line %d.\n", (caller)[1, 2]) unless @_ >= 2
     } else {
-        $res = sprintf 'sub %s { @_==0 or warn "Subroutine %s called with parameters.";', $name, $name;
+        $res = sprintf 'sub %s { @_==0 or warn "Subroutine %s called with parameters.";();', $name, $name;
     };
 
     return $res

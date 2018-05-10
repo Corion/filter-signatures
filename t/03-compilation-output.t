@@ -25,7 +25,7 @@ sub foo5 () {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Parameterless subroutines don't get converted";
-sub foo5 { @_==0 or warn "Subroutine foo5 called with parameters.";
+sub foo5 { @_==0 or warn "Subroutine foo5 called with parameters.";();
         return "We can call a sub without parameters"
 };
 RESULT
@@ -38,7 +38,7 @@ sub mylog($msg, $when=time) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Function default parameters get converted";
-sub mylog { my ($msg,$when)=@_;$when=time if @_ <= 1;
+sub mylog { my ($msg,$when)=@_;$when=time if @_ <= 1;();
     print "[$when] $msg\n";
 };
 RESULT
@@ -51,7 +51,7 @@ sub mysub() {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Functions without parameters get converted properly";
-sub mysub { @_==0 or warn "Subroutine mysub called with parameters.";
+sub mysub { @_==0 or warn "Subroutine mysub called with parameters.";();
     print "Yey\n";
 };
 RESULT
@@ -124,7 +124,7 @@ sub staleUploads( $self, $timeout = 3600, $now = time() ) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments with parentheses work";
-sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time() if @_ <= 2;
+sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time() if @_ <= 2;();
 }
 RESULT
 
@@ -134,7 +134,7 @@ sub staleUploads( $self, $timeout = 3600, $now = time((()))) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments with multiple parentheses work";
-sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time((())) if @_ <= 2;
+sub staleUploads { my ($self,$timeout,$now)=@_;$timeout = 3600 if @_ <= 1;$now = time((())) if @_ <= 2;();
 }
 RESULT
 
@@ -144,7 +144,7 @@ sub ( $self, $now = localtime(1)) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments with parentheses and values work";
-sub  { my ($self,$now)=@_;$now = localtime(1) if @_ <= 1;
+sub  { my ($self,$now)=@_;$now = localtime(1) if @_ <= 1;();
 }
 RESULT
 
@@ -157,7 +157,7 @@ sub ( $self, $cb = sub {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments with parentheses and values work";
-sub  { my ($self,$cb)=@_;$cb = sub { } if @_ <= 1;
+sub  { my ($self,$cb)=@_;$cb = sub { } if @_ <= 1;();
 
 }
 RESULT
