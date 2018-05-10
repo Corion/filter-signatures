@@ -14,9 +14,6 @@ my $module = 'Filter::signatures';
 (my $main_file = "lib/$module.pm" ) =~ s!::!/!g;
 (my $distbase = $module) =~ s!::!-!g;
 
-# I should maybe use something like Shipwright...
-regen_README($main_file);
-#regen_EXAMPLES();
 
 my @tests = map { glob $_ } 't/*.t', 't/*/*.t';
 
@@ -71,7 +68,7 @@ sub get_module_info { %module }
 if( ! caller ) {
     # I should maybe use something like Shipwright...
     regen_README($main_file);
-    regen_EXAMPLES();
+    #regen_EXAMPLES();
     WriteMakefile1(get_module_info);
 };
 
