@@ -1,10 +1,11 @@
 ---
-abstract: 'very simplicistic signatures for Perl < 5.20'
+abstract: 'very simplistic signatures for Perl < 5.20'
 author:
   - 'Max Maischein <corion@cpan.org>'
 build_requires:
   ExtUtils::MakeMaker: '0'
   Test::More: '0'
+  Text::Balanced: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 0

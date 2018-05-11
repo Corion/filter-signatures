@@ -5,6 +5,11 @@ use Data::Dumper;
 
 require Filter::signatures;
 
+# Mimic parts of the setup of Filter::Simple
+my $extractor =
+$Filter::Simple::placeholder = $Filter::Simple::placeholder
+    = qr/\Q$;\E(.{4})\Q$;\E/s;
+
 # Anonymous
 $_ = <<'SUB';
 sub ($name, $value) {

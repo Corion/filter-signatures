@@ -147,15 +147,10 @@ sub parse_argument_list {
             # Keep everything on one line
             $args[$_] =~ s/\n/ /g;
 
-            # Named argument with default
+            # Named argument
             if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
                 my $named = "$1";
                 push @defaults, "$args[$_] if \@_ <= $_;";
-                $args[$_] = $named;
-
-            # Named argument
-            } elsif( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*$/ ) {
-                my $named = "$1";
                 $args[$_] = $named;
 
             # Slurpy discard
@@ -165,12 +160,7 @@ sub parse_argument_list {
             # Slurpy discard (at the end)
             } elsif( $args[$_] =~ /^\s*[\%\@]\s*$/ ) {
                 $args[$_] = 'undef';
-            } else {
-                #use Data::Dumper;
-                #warn Dumper \@Filter::Simple::components;
-                #die "Weird, unparsed argument '$args[$_]'";
-            };
-
+            }
         };
 
         # Make sure we return undef as the last statement of our initialization

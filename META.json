@@ -1,5 +1,5 @@
 {
-   "abstract" : "very simplicistic signatures for Perl < 5.20",
+   "abstract" : "very simplistic signatures for Perl < 5.20",
    "author" : [
       "Max Maischein <corion@cpan.org>"
    ],
@@ -38,7 +38,8 @@
       },
       "test" : {
          "requires" : {
-            "Test::More" : "0"
+            "Test::More" : "0",
+            "Text::Balanced" : "0"
          }
       }
    },
