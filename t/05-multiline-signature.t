@@ -89,6 +89,7 @@ SUB
 # Replicate the setup that Filter::Simple does for us:
 
 our @components;
+no warnings 'once';
 local *components = \@Filter::Simple::components;
 
         my $comment = qr/(?<![\$\@%])#.*/;
