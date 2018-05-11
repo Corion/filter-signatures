@@ -267,7 +267,11 @@ L<perlsub/Signatures>
 L<signatures> - a module that doesn't use a source filter but optree
 modification instead
 
-L<Sub::Signatures>
+L<Sub::Signatures> - uses signatures to dispatch to different subroutines
+based on which subroutine matches the signature
+
+L<Method::Signatures> - this module implements subroutine signatures
+closer to Perl 6
 
 =head1 REPOSITORY
 

@@ -113,7 +113,11 @@ imported.
 [signatures](https://metacpan.org/pod/signatures) - a module that doesn't use a source filter but optree
 modification instead
 
-[Sub::Signatures](https://metacpan.org/pod/Sub::Signatures)
+[Sub::Signatures](https://metacpan.org/pod/Sub::Signatures) - uses signatures to dispatch to different subroutines
+based on which subroutine matches the signature
+
+[Method::Signatures](https://metacpan.org/pod/Method::Signatures) - this module implements subroutine signatures
+closer to Perl 6
 
 # REPOSITORY
 
