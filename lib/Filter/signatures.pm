@@ -82,20 +82,6 @@ versions, line numbers may get out of sync if you use here documents.
 If you spread your formal signatures across multiple lines, the line numbers
 may also go out of sync with the original document.
 
-=head2 Comments within signatures
-
-The module does not support comments within signatures
-
-  sub invalid (
-      $name,     # use this as the name
-      $location, # use this as the location
-  ) {
-      "This is an example"
-  }
-
-The workaround is to not do that or to upgrade to Perl 5.20 or higher
-and use the native signatures support there.
-
 =head2 C<< eval >>
 
 L<Filter::Simple> does not trigger when using
@@ -132,10 +118,24 @@ my $have_signatures = eval {
     1
 };
 
+sub kill_comment {
+    my( $str ) = @_;
+    my @strings = ($str =~ /$Filter::Simple::placeholder/g);
+    for my $ph (@strings) {
+        my $index = unpack('N',$ph);
+        if( ref $Filter::Simple::components[$index] and ${ $Filter::Simple::components[$index] } =~ /^#/ ) {
+            #warn ">> $str contains comment ${$Filter::Simple::components[$index]}";
+            $str =~ s!\Q$;$ph$;\E!!g;
+        };
+    }
+    $str
+}
+
 sub parse_argument_list {
     my( $name, $arglist, $whitespace ) = @_;
     (my $args=$arglist) =~ s!^\(\s*(.*)\s*\)!$1!s;
-    my @args = map { s!^\s*!!; s!\s*$!!; $_} split /\s*,\s*/, $args; # a most simple argument parser
+    my @args = map { kill_comment($_) } map { s!^\s*!!; s!\s*$!!; $_}
+        $args =~ m!((?:[^,$;]+|\Q$;\E.{4}\Q$;\E)+)!sg; # a most simple argument parser
     my $res;
     # Adjust how man newlines we gobble
     $whitespace ||= '';
@@ -241,7 +241,7 @@ PERL_5010_onwards
 
 if( (! $have_signatures) or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
-    code => \&transform_arguments,
+    code_no_comments => \&transform_arguments,
     executable => sub {
             s!^(use\s+feature\s*(['"])signatures\2;)!#$1!mg;
             s!^(no\s+warnings\s*(['"])experimental::signatures\2;)!#$1!mg;
