@@ -271,7 +271,11 @@ L<Sub::Signatures> - uses signatures to dispatch to different subroutines
 based on which subroutine matches the signature
 
 L<Method::Signatures> - this module implements subroutine signatures
-closer to Perl 6
+closer to Perl 6, but requires L<PPI> and L<Devel::Declare>
+
+L<Function::Parameters> - adds two new keywords for declaring subroutines and
+parses their signatures. It supports more features than core Perl, closer to
+Perl 6, but requires a C compiler and Pelr 5.14+.
 
 =head1 REPOSITORY
 

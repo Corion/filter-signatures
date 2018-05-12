@@ -117,7 +117,11 @@ modification instead
 based on which subroutine matches the signature
 
 [Method::Signatures](https://metacpan.org/pod/Method::Signatures) - this module implements subroutine signatures
-closer to Perl 6
+closer to Perl 6, but requires [PPI](https://metacpan.org/pod/PPI) and [Devel::Declare](https://metacpan.org/pod/Devel::Declare)
+
+[Function::Parameters](https://metacpan.org/pod/Function::Parameters) - adds two new keywords for declaring subroutines and
+parses their signatures. It supports more features than core Perl, closer to
+Perl 6, but requires a C compiler and Pelr 5.14+.
 
 # REPOSITORY
 
