@@ -275,7 +275,7 @@ closer to Perl 6, but requires L<PPI> and L<Devel::Declare>
 
 L<Function::Parameters> - adds two new keywords for declaring subroutines and
 parses their signatures. It supports more features than core Perl, closer to
-Perl 6, but requires a C compiler and Pelr 5.14+.
+Perl 6, but requires a C compiler and Perl 5.14+.
 
 =head1 REPOSITORY
 
