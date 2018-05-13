@@ -260,6 +260,13 @@ FILTER_ONLY
 
 1;
 
+=head1 USAGE WITHOUT SOURCE CODE MODIFICATION
+
+If you have a source file that was written for use with signatures and you
+cannot modify that source file, you can run it as follows:
+
+  perl -MFilter::signatures myscript.pl
+
 =head1 SEE ALSO
 
 L<perlsub/Signatures>
