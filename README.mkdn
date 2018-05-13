@@ -106,6 +106,21 @@ Perl that have native support for signatures, set
 `$ENV{FORCE_FILTER_SIGNATURES}` to a true value before the module is
 imported.
 
+# USAGE WITHOUT SOURCE CODE MODIFICATION
+
+If you have a source file that was written for use with signatures and you
+cannot modify that source file, you can run it as follows:
+
+    perl -Mlib=some/directory -MFilter::signatures=global myscript.pl
+
+This is intended as a quick-fix solution and is not very robust. If your
+script modifies `@INC`,  the filtering may not get a chance to modify
+the source code of the loaded module.
+
+This currently does not play well with (other) hooks in `@INC` as it
+only handles hooks that return a filehandle. Implementations for the
+rest are welcome.
+
 # SEE ALSO
 
 ["Signatures" in perlsub](https://metacpan.org/pod/perlsub#Signatures)
