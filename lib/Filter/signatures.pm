@@ -3,7 +3,7 @@ use strict;
 use Filter::Simple;
 
 use vars '$VERSION';
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 =head1 NAME
 
