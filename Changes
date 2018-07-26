@@ -1,4 +1,4 @@
-0.14 to be released
+0.14 2018-07-26
     + Add code and documentation on how to load this module from the command
       line. This is mostly intended to give you a way to do a quick fix for
       using Perl code that requires signatures on a version of Perl that doesn't
