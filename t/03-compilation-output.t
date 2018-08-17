@@ -1,7 +1,6 @@
 #!perl -w
 use strict;
 use Test::More tests => 15;
-use Test::More tests => 10;
 use Data::Dumper;
 
 require Filter::signatures;
