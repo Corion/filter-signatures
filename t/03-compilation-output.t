@@ -1,6 +1,7 @@
 #!perl -w
 use strict;
-use Test::More tests => 14;
+use Test::More tests => 15;
+use Test::More tests => 10;
 use Data::Dumper;
 
 require Filter::signatures;
@@ -178,6 +179,21 @@ my @args;
 sub  { my ($self,$foo)=@_;$foo = $#args if @_ <= 1;();
 }
 RESULT
+
+{ local $TODO = 'Allow for subroutine attributes';
+$_ = <<'SUB';
+sub f :lvalue ($a = do { $x = "abc"; return substr($x,0,1)}) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "5.28+ style functions with attributes work";
+sub f :lvalue {
+    $a = do { $x = "abc"; return substr($x,0,1)}
+...
+}
+RESULT
+}
 
 if( $Test::More::VERSION > 0.87 ) { # 5.8.x compatibility
     done_testing();
