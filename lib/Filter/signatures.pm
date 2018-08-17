@@ -212,12 +212,12 @@ sub transform_arguments {
         no warnings 'uninitialized';
 
     # For Perl 5.10 onwards we have nice recursive patterns and comments
-        s{\bsub(\s*) #1
-           (\w*) #2
-           (\s*) #3
+        s{\bsub(\s*)       #1
+           (\w*)           #2
+           (\s*)           #3
            \(
-           (\s*) #4
-           (     #5
+           (\s*)           #4
+           (               #5
                 (          #6
                    (?:
                      (?>[^()]+)
