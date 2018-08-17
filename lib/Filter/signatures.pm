@@ -154,7 +154,7 @@ sub kill_comment {
 }
 
 sub parse_argument_list {
-    my( $name, $arglist, $whitespace ) = @_;
+    my( $name, $attributes, $arglist, $whitespace ) = @_;
     (my $args=$arglist) =~ s!^\(\s*(.*)\s*\)!$1!s;
 
     my @args;
@@ -244,7 +244,7 @@ sub transform_arguments {
         # Named or anonymous subs
         no warnings 'uninitialized';
         s{\bsub(\s*)(\w*)(\s*)\((\s*)((?:[^)]*?\@?))(\s*)\)(\s*)\{}{
-                parse_argument_list("$2","$5","$1$3$4$6$7")
+                parse_argument_list("$2",undef,"$5","$1$3$4$6$7")
          }mge;
         $_
 }
@@ -282,7 +282,7 @@ sub transform_arguments {
            )
            (\s*)\)
            (\s*)\{}{
-                parse_argument_list("$2","$5","$1$3$4$8$9")
+                parse_argument_list("$2",undef, "$5","$1$3$4$8$9")
          }mgex;
         $_
 }

@@ -13,6 +13,6 @@ $Filter::Simple::placeholder = $Filter::Simple::placeholder
 # placeholders for strings:
 
 my $placeholder = qq(\$value = $;   ,$;);
-my $stuff = Filter::signatures::parse_argument_list("foo","\$name, $placeholder");
+my $stuff = Filter::signatures::parse_argument_list("foo",undef, "\$name, $placeholder");
 is $stuff, 'sub foo { my ($name,$value)=@_;' . $placeholder . ' if @_ <= 1;();',
     "Filter::Simple string substitution doesn't throw us off";
