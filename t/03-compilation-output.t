@@ -168,6 +168,18 @@ sub  { my ($self,$cb)=@_;$cb = sub { } if @_ <= 1;();
 RESULT
 
 $_ = <<'SUB';
+sub f ($a,@) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Slurpy discard argument works";
+sub f { my ($a,undef)=@_;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
 my @args;
 sub ( $self, $foo = $#args) {
 }

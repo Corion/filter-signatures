@@ -135,7 +135,8 @@ sub parse_argument_list {
     my( $name, $arglist, $whitespace ) = @_;
     (my $args=$arglist) =~ s!^\(\s*(.*)\s*\)!$1!s;
     my @args = map { kill_comment($_) } map { s!^\s*!!; s!\s*$!!; $_}
-        $args =~ m!((?:[^,$;]+|\Q$;\E.{4}\Q$;\E)+)!sg; # a most simple argument parser
+               $args =~ m!((?:[^,$;]+|\Q$;\E.{4}\Q$;\E)+)!sg;
+
     my $res;
     # Adjust how man newlines we gobble
     $whitespace ||= '';
@@ -205,16 +206,12 @@ if( $] >= 5.010 ) {
     no warnings 'redefine';
     eval <<'PERL_5010_onwards';
 sub transform_arguments {
-        # This should also support
-        # sub foo($x,$y,@) { ... }, throwing away additional arguments
-        # Named or anonymous subs
     # We also want to handle arbitrarily deeply nested balanced parentheses here
         no warnings 'uninitialized';
 
-    # For Perl 5.10 onwards we have nice recursive patterns and comments
-        s{\bsub(\s*) #1
-           (\w*) #2
-           (\s*) #3
+        s{\bsub(\s*)       #1
+           (\w*)           #2
+           (\s*)           #3
            \(
            (\s*) #4
            (     #5
@@ -227,7 +224,7 @@ sub transform_arguments {
                      \s*\)
                      )
                 )*
-             \@?
+             \@?                    # optional slurpy discard argument at the end
            )
            (\s*)\)
            (\s*)\{}{
@@ -243,7 +240,7 @@ sub import {
     my( $class, $scope ) = @_;
 # Guard against double-installation of our scanner
     if( $scope and $scope eq 'global' ) {
-        
+
         my $scan; $scan = sub {
             my( $self, $filename ) = @_;
 
