@@ -243,12 +243,18 @@ sub transform_arguments {
            (               #5
                 (          #6
                    (?:
-                     (?>[^()]+)
+                     \\.            # regex escapes and references
                      |
                      \(
                          (?6)?      # recurse for parentheses
                      \)
-                     )
+                     |
+                     \{
+                         (?6)?      # recurse for curly brackets
+                     \}
+                     |
+                     (?>[^\\\(\)\{\}]+) # other stuff
+                     )+
                 )*
              \@?                    # optional slurpy discard argument at the end
            )
