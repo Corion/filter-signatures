@@ -62,7 +62,7 @@ A better hotfix is to upgrade to Perl 5.20 or higher and use the native
 signatures support there. No other code change is needed, as this module will
 disable its functionality when it is run on a Perl supporting signatures.
 
-=head2 Parentheses in default assignments
+=head2 Parentheses in default expresisons
 
 Ancient versions of Perl before version 5.10 do not have recursive regular
 expressions. These will not be able to properly handle statements such
@@ -73,6 +73,28 @@ as
 
 The hotfix is to rewrite these function signatures to not use parentheses. The
 better approach is to upgrade to Perl 5.20 or higher.
+
+=head2 Regular expression matches in default expressions
+
+To keep the argument parser simple, the parsing of regular expressions has been
+omitted. For Perl below 5.10, you cannot use regular expressions as default
+expressions. For higher Perl versions, this means that parentheses, curly braces
+and commas need to be explicitly escaped with a backslash when used as
+default expressions:
+
+    sub foo( $x = /,/ ) { # WRONG!
+    sub foo( $x = /\,/ ) { # GOOD!
+
+    sub foo( $x = /[(]/ ) { # WRONG!
+    sub foo( $x = /[\(]/ ) { # GOOD!
+
+The hotfix is to rewrite these default expressions with explicitly quoted
+commas, parentheses and curly braces. The better approach is to upgrade to
+Perl 5.20 or higher.
+
+=head2 Subroutine attributes
+
+Subroutine attributes are currently not supported at all.
 
 =head2 Line Numbers
 
