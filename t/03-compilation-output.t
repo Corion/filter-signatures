@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 14;
+use Test::More tests => 17;
 use Data::Dumper;
 
 require Filter::signatures;
@@ -176,6 +176,30 @@ Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Default arguments that look like comments";
 my @args;
 sub  { my ($self,$foo)=@_;$foo = $#args if @_ <= 1;();
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = do { $x = "abc"; return substr($x,0,1)}) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "do-blocks with parentheses work";
+sub f { my($a)=@_;$a = do { $x = "abc"; return substr($x,0,1)} if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = do { }) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "do-blocks work";
+sub f { my ($a)=@_;$a = do { } if @_ <= 0;();
+...
 }
 RESULT
 
