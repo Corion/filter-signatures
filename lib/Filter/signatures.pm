@@ -138,7 +138,7 @@ sub parse_argument_list {
                $args =~ m!((?:[^,$;]+|\Q$;\E.{4}\Q$;\E)+)!sg;
 
     my $res;
-    # Adjust how man newlines we gobble
+    # Adjust how many newlines we gobble
     $whitespace ||= '';
     #warn "[[$whitespace$args]]";
     my $padding = () = (($whitespace . $args) =~ /\n/smg);
