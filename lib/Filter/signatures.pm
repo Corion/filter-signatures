@@ -347,6 +347,9 @@ rest are welcome.
 
 L<perlsub/Signatures>
 
+L<App::sigfix>, which transforms your source code directly between
+the different notations without employing a source filter
+
 L<signatures> - a module that doesn't use a source filter but optree
 modification instead
 
