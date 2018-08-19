@@ -134,9 +134,35 @@ sub kill_comment {
 sub parse_argument_list {
     my( $name, $arglist, $whitespace ) = @_;
     (my $args=$arglist) =~ s!^\(\s*(.*)\s*\)!$1!s;
-    my @args = map { kill_comment($_) } map { s!^\s*!!; s!\s*$!!; $_}
-               $args =~ m!((?:[^,$;]+|\Q$;\E.{4}\Q$;\E)+)!sg;
 
+    my @args;
+    # A not so simple argument parser, but still good enough for < 5.10:
+    # We want to split on the outermost commas, so we find the position of these
+    # commas by replacing everything inside parentheses and curly brackets with
+    # whitespace. Then we have the positions of the relevant commas and can extract
+    # the arguments from that. Not elegant but works everywhere:
+    if( length $args ) {
+        my $splitlist = $args;
+        my $repl = " " x length $;;
+        $splitlist =~ s!\Q$;\E.{4}\Q$;\E!$repl    $repl!sg; # remove all string placeholders
+        1 while ($splitlist =~ s!\\.!  !g);                 # unquote all the things
+        #warn $splitlist;
+        1 while ($splitlist =~ s!(\([^(){}]*\)|\{[^(){}]*\})!" " x length($1)!ge); # Now, remove all nested parentheses stuff
+        #warn $splitlist;
+        my @argument_positions;
+        while( $splitlist =~ /,/g ) {
+            push @argument_positions, pos($splitlist);
+        };
+        push @argument_positions, length( $splitlist )+1;
+        my $lastpos = 0;
+        @args = map { kill_comment($_) } map { s!^\s*!!; s!\s*$!!; $_}
+                   map { my $r = substr $args, $lastpos, $_-$lastpos-1;
+                         #warn "$lastpos:$_:$r";
+                         $lastpos=$_;
+                         $r
+                   } @argument_positions
+                   ;
+    };
     my $res;
     # Adjust how many newlines we gobble
     $whitespace ||= '';
