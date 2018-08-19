@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 17;
+use Test::More tests => 29;
 use Data::Dumper;
 
 require Filter::signatures;
@@ -192,13 +192,100 @@ sub  { my ($self,$foo)=@_;$foo = $#args if @_ <= 1;();
 RESULT
 
 $_ = <<'SUB';
-sub f ($a = do { $x = "abc"; return substr($x,0,1)}) {
+sub f ($a = /\w/ ) {
 ...
 }
 SUB
 Filter::signatures::transform_arguments();
-is $_, <<'RESULT', "do-blocks with parentheses work";
-sub f { my($a)=@_;$a = do { $x = "abc"; return substr($x,0,1)} if @_ <= 0;();
+is $_, <<'RESULT', "Argument lists containing regular expressions work";
+sub f { my ($a)=@_;$a = /\w/ if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = \$b, $c=\@d, $e=\%f, $g=\&h, $i=\*j ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Argument lists containing scalar references";
+sub f { my ($a,$c,$e,$g,$i)=@_;$a = \$b if @_ <= 0;$c=\@d if @_ <= 1;$e=\%f if @_ <= 2;$g=\&h if @_ <= 3;$i=\*j if @_ <= 4;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /\(/ ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Argument lists containing unmatched parentheses work";
+sub f { my ($a)=@_;$a = /\(/ if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /[\(]/ ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Characterclasses with unmatched quoted parentheses work";
+sub f { my ($a)=@_;$a = /[\(]/ if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /[\)]/ ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Characterclasses with unmatched quoted parentheses work";
+sub f { my ($a)=@_;$a = /[\)]/ if @_ <= 0;();
+...
+}
+RESULT
+
+{ local $TODO = 'More robust regexp parsing needed';
+$_ = <<'SUB';
+sub f ($a = /[(]/ ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Regular expressions containing characterclasses with unmatched parentheses work";
+sub f { my ($a)=@_;$a = /\(/ if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /[)]/ ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Regular expressions containing characterclasses with unmatched parentheses work";
+sub f { my ($a)=@_;$a = /[)]/ if @_ <= 0;();
+...
+}
+RESULT
+
+}
+
+$_ = <<'SUB';
+sub f ($a = qr(\() ) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Argument lists containing unmatched parentheses within qr-strings work";
+sub f { my ($a)=@_;$a = qr(\() if @_ <= 0;();
 ...
 }
 RESULT
@@ -211,6 +298,66 @@ SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "do-blocks work";
 sub f { my ($a)=@_;$a = do { } if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = substr("abc",0,1)) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Commas within subroutine calls don't split the argument lists";
+sub f { my ($a)=@_;$a = substr("abc",0,1) if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /\,/, $b=1) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Commas within regular expression matches don't split the argument lists";
+sub f { my ($a,$b)=@_;$a = /\,/ if @_ <= 0;$b=1 if @_ <= 1;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = /\,/, $b=1) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Commas within regular expression matches don't split the argument lists";
+sub f { my ($a,$b)=@_;$a = /\,/ if @_ <= 0;$b=1 if @_ <= 1;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = do { $x = "abc"; return substr $x,0,1}) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "Commas within do-blocks don't split the argument lists";
+sub f { my ($a)=@_;$a = do { $x = "abc"; return substr $x,0,1} if @_ <= 0;();
+...
+}
+RESULT
+
+$_ = <<'SUB';
+sub f ($a = do { $x = "abc"; return substr($x,0,1)}) {
+...
+}
+SUB
+Filter::signatures::transform_arguments();
+is $_, <<'RESULT', "do-blocks with parentheses work";
+sub f { my ($a)=@_;$a = do { $x = "abc"; return substr($x,0,1)} if @_ <= 0;();
 ...
 }
 RESULT
