@@ -18,7 +18,7 @@ sub ($name, $value) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Anonymous subroutines get converted";
-sub  { my ($name,$value)=@_;
+sub  { my ($name,$value)=@_;();
         return "'$name' is '$value'"
     };
 RESULT
@@ -69,7 +69,7 @@ sub mysub($) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Functions with unnamed parameters get converted properly";
-sub mysub { my (undef)=@_;
+sub mysub { my (undef)=@_;();
     print "Yey\n";
 };
 RESULT
@@ -82,7 +82,7 @@ sub mysub($foo, $, $bar) {
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "Functions without parameters get converted properly";
-sub mysub { my ($foo,undef,$bar)=@_;
+sub mysub { my ($foo,undef,$bar)=@_;();
     print "Yey, $foo => $bar\n";
 };
 RESULT
@@ -117,7 +117,7 @@ sub foo($bar,$baz) { print "Yey\n"; }
 SUB
 Filter::signatures::transform_arguments();
 is $_, <<'RESULT', "RT #xxxxxx Single-line functions work";
-sub foo { my ($bar,$baz)=@_; print "Yey\n"; }
+sub foo { my ($bar,$baz)=@_;(); print "Yey\n"; }
 RESULT
 
 { local $TODO = "Recursive parentheses don't work on $]"
