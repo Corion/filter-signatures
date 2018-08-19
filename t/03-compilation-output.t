@@ -239,6 +239,9 @@ sub f { my ($a)=@_;$a = /[\(]/ if @_ <= 0;();
 }
 RESULT
 
+{ local $TODO = "Recursive parentheses don't work on $]"
+  if( $] < 5.010 );
+
 $_ = <<'SUB';
 sub f ($a = /[\)]/ ) {
 ...
@@ -250,6 +253,7 @@ sub f { my ($a)=@_;$a = /[\)]/ if @_ <= 0;();
 ...
 }
 RESULT
+}
 
 { local $TODO = 'More robust regexp parsing needed';
 $_ = <<'SUB';
@@ -278,6 +282,9 @@ RESULT
 
 }
 
+{ local $TODO = "Recursive parentheses don't work on $]"
+  if( $] < 5.010 );
+
 $_ = <<'SUB';
 sub f ($a = qr(\() ) {
 ...
@@ -289,6 +296,7 @@ sub f { my ($a)=@_;$a = qr(\() if @_ <= 0;();
 ...
 }
 RESULT
+}
 
 $_ = <<'SUB';
 sub f ($a = do { }) {
@@ -302,6 +310,9 @@ sub f { my ($a)=@_;$a = do { } if @_ <= 0;();
 }
 RESULT
 
+{ local $TODO = "Recursive parentheses don't work on $]"
+  if( $] < 5.010 );
+
 $_ = <<'SUB';
 sub f ($a = substr("abc",0,1)) {
 ...
@@ -313,6 +324,7 @@ sub f { my ($a)=@_;$a = substr("abc",0,1) if @_ <= 0;();
 ...
 }
 RESULT
+}
 
 $_ = <<'SUB';
 sub f ($a = /\,/, $b=1) {
@@ -350,6 +362,9 @@ sub f { my ($a)=@_;$a = do { $x = "abc"; return substr $x,0,1} if @_ <= 0;();
 }
 RESULT
 
+{ local $TODO = "Recursive parentheses don't work on $]"
+  if( $] < 5.010 );
+
 $_ = <<'SUB';
 sub f ($a = do { $x = "abc"; return substr($x,0,1)}) {
 ...
@@ -361,6 +376,7 @@ sub f { my ($a)=@_;$a = do { $x = "abc"; return substr($x,0,1)} if @_ <= 0;();
 ...
 }
 RESULT
+}
 
 if( $Test::More::VERSION > 0.87 ) { # 5.8.x compatibility
     done_testing();
