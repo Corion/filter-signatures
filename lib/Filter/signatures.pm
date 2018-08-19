@@ -213,15 +213,15 @@ sub transform_arguments {
            (\w*)           #2
            (\s*)           #3
            \(
-           (\s*) #4
-           (     #5
+           (\s*)           #4
+           (               #5
                 (          #6
                    (?:
                      (?>[^()]+)
                      |
-                     \(\s*
-                         (?6)? # recurse for parentheses
-                     \s*\)
+                     \(
+                         (?6)?      # recurse for parentheses
+                     \)
                      )
                 )*
              \@?                    # optional slurpy discard argument at the end
