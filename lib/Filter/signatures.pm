@@ -420,7 +420,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2015-2018 by Max Maischein C<corion@cpan.org>.
+Copyright 2015-2020 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
