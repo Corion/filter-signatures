@@ -345,8 +345,8 @@ if( (! $have_signatures) or $ENV{FORCE_FILTER_SIGNATURES} ) {
 FILTER_ONLY
     code_no_comments => \&transform_arguments,
     executable => sub {
-            s!^(use\s+feature\s*(['"])signatures\2;)!#$1!mg;
-            s!^(no\s+warnings\s*(['"])experimental::signatures\2;)!#$1!mg;
+            s!^\s*(use\s+feature\s*(['"])signatures\2;)!#$1!mg;
+            s!^\s*(no\s+warnings\s*(['"])experimental::signatures\2;)!#$1!mg;
     },
     ;
     # Set up a fake 'experimental::signatures' warnings category
