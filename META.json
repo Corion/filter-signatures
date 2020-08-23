@@ -45,13 +45,16 @@
    },
    "release_status" : "stable",
    "resources" : {
+      "license" : [
+         "https://dev.perl.org/licenses/"
+      ],
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/Corion/filter-signatures.git",
-         "web" : "https://github.com/Corion/filter-signatures"
+         "url" : "git://github.com/Corion/Filter-signatures.git",
+         "web" : "https://github.com/Corion/Filter-signatures"
       }
    },
-   "version" : "0.15",
-   "x_serialization_backend" : "JSON::PP version 2.97001",
+   "version" : "0.16",
+   "x_serialization_backend" : "JSON::PP version 4.04",
    "x_static_install" : 1
 }
