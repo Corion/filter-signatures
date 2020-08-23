@@ -251,6 +251,9 @@ sub transform_arguments {
 
 if( $] >= 5.010 ) {
     # Perl 5.10 onwards has recursive regex patterns, and comments, and stuff
+
+# We have an interesting dependency on the format the string placeholders that
+# Filter::Simple supplies. They MUST be four characters wide.
     no warnings 'redefine';
     eval <<'PERL_5010_onwards';
 sub transform_arguments {
@@ -267,6 +270,10 @@ sub transform_arguments {
                    (?:
                      \\.            # regex escapes and references
                      |
+                     (?>".{4}")     # strings (that are placeholders)
+                     |
+                     (?>"[^"]+")    # strings (that are not placeholders, mainly for the test suite)
+                     |
                      \(
                          (?6)?      # recurse for parentheses
                      \)
@@ -275,7 +282,7 @@ sub transform_arguments {
                          (?6)?      # recurse for curly brackets
                      \}
                      |
-                     (?>[^\\\(\)\{\}]+) # other stuff
+                     (?>[^\\\(\)\{\}"]+) # other stuff
                      )+
                 )*
              \@?                    # optional slurpy discard argument at the end
