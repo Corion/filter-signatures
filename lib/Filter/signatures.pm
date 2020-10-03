@@ -258,27 +258,35 @@ if( $] >= 5.010 ) {
 sub transform_arguments {
     # We also want to handle arbitrarily deeply nested balanced parentheses here
         no warnings 'uninitialized';
-
-        s{\bsub(\s*)       #1
-           (\w*)           #2
-           (\s*)           #3
-           \(
+        # If you are staring at this, somewhere in your source code, you have
+        # $/ and you want to make sure there is a second slash on the same line,
+        # like `local $/; # / for Filter::signatures`
+        # Or "-s _" , this also trips up Filter::Simple. Replace by "-s *_"
+        #my $msg = $_;
+        #$msg =~ s!([\x00-\x09\x0b-\x1F])!sprintf "\\%03o", ord $1!ge;
+        #print "$msg\n---\n";
+        #use Regexp::Debugger;
+        s{(?<sub>\bsub\b)  #1
+           (?>(\s*))       #2
+           (?>(\b\w+\b|))  #3
            (\s*)           #4
-           (               #5
-                (          #6
+           \(
+           (\s*)           #5
+           (               #6
+                (          #7
                    (?:
                      \\.            # regex escapes and references
                      |
-                     (?>".{4}")     # strings (that are placeholders)
+                     (?>".{5}")     # strings (that are placeholders)
                      |
                      (?>"[^"]+")    # strings (that are not placeholders, mainly for the test suite)
                      |
                      \(
-                         (?6)?      # recurse for parentheses
+                         (?7)?      # recurse for parentheses
                      \)
                      |
                      \{
-                         (?6)?      # recurse for curly brackets
+                         (?7)?      # recurse for curly brackets
                      \}
                      |
                      (?>[^\\\(\)\{\}"]+) # other stuff
@@ -288,7 +296,7 @@ sub transform_arguments {
            )
            (\s*)\)
            (\s*)\{}{
-                parse_argument_list("$2","$5","$1$3$4$8$9")
+                parse_argument_list("$3","$6","$2$4$5$9$10")
          }mgex;
         $_
 }
