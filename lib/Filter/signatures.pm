@@ -44,8 +44,14 @@ as default values may work by accident. Commas within default values happen
 to work due to the design of L<Filter::Simple>, which removes them for
 the application of this filter.
 
+=head2 Syntax peculiarities
+
 Note that this module inherits all the bugs of L<Filter::Simple> and potentially
-adds some of its own. Most notable is that Filter::Simple sometimes will
+adds some of its own.
+
+=head3 Slashes
+
+Most notable is that Filter::Simple sometimes will
 misinterpret the division operator C<< / >> as a leading character to starting
 a regex match:
 
@@ -61,7 +67,29 @@ A better hotfix is to upgrade to Perl 5.20 or higher and use the native
 signatures support there. No other code change is needed, as this module will
 disable its functionality when it is run on a Perl supporting signatures.
 
-=head2 Parentheses in default expresisons
+=head3 Size operator interpreted as replacement
+
+Filter::Simple sometimes will
+misinterpret the file size operator on the default filehandle C<< -s _ >>
+as the start of a replacement
+
+    my $filesize = -s _;
+
+# Misinterpreted as
+
+    my $filesize = -(s _;..._g);
+
+This will manifest itself through syntax errors appearing where everything
+seems in order. The hotfix is to indicate that C<<_>> is a filehandle by
+prefixing it with C<<*>>:
+
+    my $filesize = -s *_;
+
+A better hotfix is to upgrade to Perl 5.20 or higher and use the native
+signatures support there. No other code change is needed, as this module will
+disable its functionality when it is run on a Perl supporting signatures.
+
+=head2 Parentheses in default expressisons
 
 Ancient versions of Perl before version 5.10 do not have recursive regular
 expressions. These will not be able to properly handle statements such
