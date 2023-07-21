@@ -224,9 +224,15 @@ sub parse_argument_list {
             $args[$_] =~ s/\n/ /g;
 
             # Named argument with default
-            if( $args[$_] =~ /^\s*([\$\%\@]\s*\w+)\s*=/ ) {
+            if( $args[$_] =~ m!^\s*([\$\%\@]\s*\w+)\s*(//=|\|\|=|=)\s*(.*)$! ) {
                 my $named = "$1";
-                push @defaults, "$args[$_] if \@_ <= $_;";
+                my $op = "$2";
+                my $val = "$3";
+                if( $op eq '=' ) {
+                    push @defaults, "$named $op $val if \@_ <= $_;";
+                } else {
+                    push @defaults, "$named $op $val;";
+                }
                 $args[$_] = $named;
 
             # Named argument
