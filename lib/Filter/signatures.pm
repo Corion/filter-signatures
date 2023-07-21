@@ -2,7 +2,7 @@ package Filter::signatures;
 use strict;
 use Filter::Simple;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 =head1 NAME
 
@@ -461,7 +461,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2015-2020 by Max Maischein C<corion@cpan.org>.
+Copyright 2015-2023 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
