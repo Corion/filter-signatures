@@ -2,7 +2,7 @@ package Filter::signatures;
 use strict;
 use Filter::Simple;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 =head1 NAME
 
